@@ -53,6 +53,58 @@ def generate_email(prompt: str, tone: str = "professional") -> dict:
         return {"subject": "Connecting with {Company}", "body": raw}
 
 
+# ── AI Styled HTML Email Generator ────────────────────────────────────────────
+
+def generate_html_email(brief: str, brand_name: str = "", cta_label: str = "", tone: str = "professional") -> dict:
+    """
+    Generate a complete, professional HTML email (inline-styled, card-based layout —
+    similar to a welcome/onboarding email) from a short brief description of what
+    the email should contain.
+    Returns {"subject": str, "html": str}
+    """
+    system = (
+        "You are an expert email designer who builds clean, professional HTML emails "
+        "using ONLY inline CSS (no <style> blocks, no external CSS, no classes) because "
+        "most email clients strip anything else. "
+        "Structure: a centered card (max-width 600px) with a white background, light grey "
+        "page background, a heading, a short intro paragraph, an optional numbered list of "
+        "2-4 short 'next step' items each with a bold title and one-line description, an "
+        "optional bold CTA button (dark background, white text, rounded corners), and a "
+        "muted footer line with a support contact if given. "
+        "Use placeholders {Name} and {Company} naturally in the greeting/body where it makes sense. "
+        "Return ONLY a JSON object with two keys: 'subject' (string) and 'html' (a single-line "
+        "or minimally-wrapped full HTML string starting with a <div> or <table> wrapper — do NOT "
+        "include <html>, <head>, or <body> tags). No markdown, no explanation, just the JSON."
+    )
+    user_msg = (
+        f"Brief / what to include: {brief}\n"
+        f"Tone: {tone}\n"
+    )
+    if brand_name:
+        user_msg += f"Brand / sender name: {brand_name}\n"
+    if cta_label:
+        user_msg += f"Call-to-action button label: {cta_label}\n"
+
+    resp = _client().chat.completions.create(
+        model=MODEL,
+        messages=[{"role": "system", "content": system},
+                  {"role": "user", "content": user_msg}],
+        temperature=0.6,
+        max_tokens=1800,
+    )
+    import json, re
+    raw = resp.choices[0].message.content.strip()
+    raw = re.sub(r"```json|```html|```", "", raw).strip()
+    try:
+        result = json.loads(raw)
+        if "subject" not in result or "html" not in result:
+            raise ValueError("missing keys")
+        return result
+    except Exception:
+        # Fallback: treat the whole response as the HTML body
+        return {"subject": f"A message from {brand_name or 'us'}", "html": raw}
+
+
 # ── AI Subject Line Generator ─────────────────────────────────────────────────
 
 def generate_subjects(context: str, count: int = 10) -> list[str]:
