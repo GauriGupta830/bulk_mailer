@@ -161,3 +161,204 @@ def get_gmail_token(user_id: int) -> tuple[str | None, str | None]:
         return None, None
     finally:
         conn.close()
+
+
+# ── Profile ────────────────────────────────────────────────────────────────
+
+def update_user_name(user_id: int, name: str) -> bool:
+    name = name.strip()
+    if not name:
+        return False
+    conn = get_connection()
+    try:
+        conn.execute("UPDATE users SET name=? WHERE id=?", (name, user_id))
+        conn.commit()
+        return True
+    finally:
+        conn.close()
+
+
+# ── Multiple Gmail Accounts ──────────────────────────────────────────────────
+
+def _ensure_gmail_accounts_table():
+    conn = get_connection()
+    try:
+        conn.execute(
+            """CREATE TABLE IF NOT EXISTS gmail_accounts (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 user_id INTEGER NOT NULL,
+                 email TEXT NOT NULL,
+                 token_json TEXT NOT NULL,
+                 is_active INTEGER DEFAULT 0,
+                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                 UNIQUE(user_id, email)
+               )"""
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def add_or_update_gmail_account(user_id: int, email: str, token_json: str):
+    """Link a Gmail account (or refresh its token if already linked).
+    New accounts are NOT auto-activated if the user already has one active —
+    they land in the list so the user can switch to them explicitly.
+    The very first account linked for a user becomes active automatically.
+    """
+    _ensure_gmail_accounts_table()
+    conn = get_connection()
+    try:
+        existing = conn.execute(
+            "SELECT id FROM gmail_accounts WHERE user_id=? AND email=?", (user_id, email)
+        ).fetchone()
+        if existing:
+            conn.execute(
+                "UPDATE gmail_accounts SET token_json=? WHERE id=?", (token_json, existing["id"])
+            )
+            account_id = existing["id"]
+        else:
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO gmail_accounts (user_id, email, token_json, is_active) VALUES (?,?,?,0)",
+                (user_id, email, token_json),
+            )
+            account_id = cur.lastrowid
+
+        any_active = conn.execute(
+            "SELECT id FROM gmail_accounts WHERE user_id=? AND is_active=1", (user_id,)
+        ).fetchone()
+        conn.commit()
+    finally:
+        conn.close()
+
+    if not any_active:
+        activate_gmail_account(user_id, account_id)
+
+    return account_id
+
+
+def list_gmail_accounts(user_id: int) -> list[dict]:
+    _ensure_gmail_accounts_table()
+    conn = get_connection()
+    try:
+        rows = conn.execute(
+            "SELECT id, email, is_active FROM gmail_accounts WHERE user_id=? ORDER BY created_at",
+            (user_id,),
+        ).fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+def activate_gmail_account(user_id: int, account_id: int) -> bool:
+    _ensure_gmail_accounts_table()
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT * FROM gmail_accounts WHERE id=? AND user_id=?", (account_id, user_id)
+        ).fetchone()
+        if not row:
+            return False
+        conn.execute("UPDATE gmail_accounts SET is_active=0 WHERE user_id=?", (user_id,))
+        conn.execute("UPDATE gmail_accounts SET is_active=1 WHERE id=?", (account_id,))
+        # Mirror into users table so the existing send_campaign()/get_gmail_token() flow keeps working unchanged
+        conn.execute(
+            "UPDATE users SET gmail_token=?, gmail_email=? WHERE id=?",
+            (row["token_json"], row["email"], user_id),
+        )
+        conn.commit()
+        return True
+    finally:
+        conn.close()
+
+
+def remove_gmail_account(user_id: int, account_id: int) -> bool:
+    _ensure_gmail_accounts_table()
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT * FROM gmail_accounts WHERE id=? AND user_id=?", (account_id, user_id)
+        ).fetchone()
+        if not row:
+            return False
+        was_active = bool(row["is_active"])
+        conn.execute("DELETE FROM gmail_accounts WHERE id=?", (account_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
+    if was_active:
+        remaining = list_gmail_accounts(user_id)
+        if remaining:
+            activate_gmail_account(user_id, remaining[0]["id"])
+        else:
+            save_gmail_token(user_id, "", "")
+    return True
+
+
+# ── Unsubscribe / Suppression List ──────────────────────────────────────────
+
+def _ensure_unsubscribes_table():
+    conn = get_connection()
+    try:
+        conn.execute(
+            """CREATE TABLE IF NOT EXISTS unsubscribes (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 user_id INTEGER NOT NULL,
+                 email TEXT NOT NULL,
+                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                 UNIQUE(user_id, email)
+               )"""
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def generate_unsubscribe_token(user_id: int, email: str) -> str:
+    msg = f"{user_id}:{email.lower().strip()}".encode()
+    return hmac.new(SECRET_KEY.encode(), msg, hashlib.sha256).hexdigest()[:24]
+
+
+def verify_unsubscribe_token(user_id: int, email: str, token: str) -> bool:
+    expected = generate_unsubscribe_token(user_id, email)
+    return hmac.compare_digest(expected, token or "")
+
+
+def add_unsubscribe(user_id: int, email: str):
+    _ensure_unsubscribes_table()
+    conn = get_connection()
+    try:
+        conn.execute(
+            "INSERT OR IGNORE INTO unsubscribes (user_id, email) VALUES (?,?)",
+            (user_id, email.lower().strip()),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def is_unsubscribed(user_id: int, email: str) -> bool:
+    _ensure_unsubscribes_table()
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT 1 FROM unsubscribes WHERE user_id=? AND email=?",
+            (user_id, email.lower().strip()),
+        ).fetchone()
+        return row is not None
+    finally:
+        conn.close()
+
+
+def list_unsubscribes(user_id: int) -> list[dict]:
+    _ensure_unsubscribes_table()
+    conn = get_connection()
+    try:
+        rows = conn.execute(
+            "SELECT email, created_at FROM unsubscribes WHERE user_id=? ORDER BY created_at DESC",
+            (user_id,),
+        ).fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
