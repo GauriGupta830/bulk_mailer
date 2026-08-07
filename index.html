@@ -11,7 +11,13 @@
   /* ── Reset & Base ───────────────────────────────────────── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root,
+  :root {
+    --sidebar-w:      240px;
+    --radius:         10px;
+    --radius-lg:      16px;
+    --transition:     all 0.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
   html[data-theme="indigo"] {
     --bg-base:        #060912;
     --bg-surface:     #0D1117;
@@ -33,10 +39,6 @@
     --text-primary:   #F1F5F9;
     --text-secondary: #94A3B8;
     --text-muted:     #475569;
-    --sidebar-w:      240px;
-    --radius:         10px;
-    --radius-lg:      16px;
-    --transition:     all 0.2s cubic-bezier(0.4,0,0.2,1);
   }
 
   /* Theme 2 — Sunset (warm coral / amber, dark base) */
@@ -111,6 +113,31 @@
     --text-muted:     #4C6656;
   }
 
+  /* Theme 5 — Gmail (light, white/blue/red — inspired by Gmail's own UI) */
+  :root,
+  html[data-theme="gmail"] {
+    --bg-base:        #F6F8FC;
+    --bg-surface:     #FFFFFF;
+    --bg-elevated:    #FFFFFF;
+    --bg-hover:       #F1F3F4;
+    --border:         rgba(60,64,67,0.12);
+    --border-strong:  rgba(60,64,67,0.22);
+    --accent:         #1A73E8;
+    --accent-light:   #4285F4;
+    --accent-glow:    rgba(26,115,232,0.18);
+    --accent-subtle:  rgba(26,115,232,0.08);
+    --accent-grad-2:  #EA4335;
+    --success:        #1E8E3E;
+    --success-subtle: rgba(30,142,62,0.1);
+    --warning:        #F9AB00;
+    --warning-subtle: rgba(249,171,0,0.12);
+    --danger:         #D93025;
+    --danger-subtle:  rgba(217,48,37,0.08);
+    --text-primary:   #202124;
+    --text-secondary: #5F6368;
+    --text-muted:     #80868B;
+  }
+
   html, body {
     height: 100%;
     background: var(--bg-base);
@@ -162,7 +189,7 @@
 
   .logo-icon {
     width: 32px; height: 32px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-grad-2, var(--accent-light)));
+    background: var(--accent);
     border-radius: 9px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
@@ -245,7 +272,7 @@
 
   .avatar {
     width: 30px; height: 30px;
-    background: linear-gradient(135deg, var(--accent), #7C3AED);
+    background: var(--accent);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 12px;
@@ -297,7 +324,7 @@
   .nav-item.active {
     background: var(--accent-subtle);
     color: var(--text-primary);
-    border: 1px solid rgba(79,70,229,0.2);
+    border: 1px solid var(--accent-glow);
   }
 
   .nav-item.active .nav-icon { color: var(--accent-light); }
@@ -374,7 +401,7 @@
     background: var(--accent);
     color: white;
   }
-  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(79,70,229,0.35); }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
 
   .btn-secondary {
     background: var(--bg-elevated);
@@ -657,7 +684,7 @@
     font-weight: 600;
     background: var(--accent-subtle);
     color: var(--accent-light);
-    border: 1px solid rgba(79,70,229,0.15);
+    border: 1px solid var(--accent-glow);
   }
 
   /* Modal */
@@ -746,7 +773,7 @@
 
   .auth-left {
     flex: 1;
-    background: linear-gradient(145deg, #0D1117 0%, #0F0A1E 50%, #060912 100%);
+    background: linear-gradient(145deg, var(--bg-surface) 0%, var(--accent-subtle) 50%, var(--bg-base) 100%);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -760,7 +787,7 @@
     position: absolute;
     top: -120px; right: -120px;
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(79,70,229,0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -769,7 +796,7 @@
     position: absolute;
     bottom: -80px; left: 60px;
     width: 280px; height: 280px;
-    background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--accent-subtle) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -836,44 +863,6 @@
     font-size: 13px;
     color: var(--text-secondary);
     margin-bottom: 28px;
-  }
-
-  .google-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 11px 16px;
-    background: white;
-    color: #3c4043;
-    border: 1px solid #dadce0;
-    border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    margin-bottom: 20px;
-  }
-
-  .google-btn:hover {
-    background: #f8f9fa;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-
-  .google-logo { width: 18px; height: 18px; flex-shrink: 0; }
-
-  .or-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .or-divider span { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
-  .or-divider::before, .or-divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
   }
 
   .auth-switch {
@@ -968,6 +957,69 @@
     top: 2px; right: 2px;
   }
 
+  .notif-wrap { position: relative; }
+
+  .notif-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 360px;
+    max-height: 440px;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    z-index: 60;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: var(--transition);
+  }
+
+  .notif-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+  .notif-panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px; font-weight: 600; color: var(--text-primary);
+  }
+
+  .notif-panel-list { overflow-y: auto; flex: 1; }
+
+  .notif-item {
+    display: flex; gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: default;
+  }
+  .notif-item:hover { background: var(--bg-hover); }
+  .notif-item:last-child { border-bottom: none; }
+
+  .notif-icon {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .notif-icon svg { width: 14px; height: 14px; }
+  .notif-icon.reply { background: var(--success-subtle); color: var(--success); }
+  .notif-icon.unsubscribe { background: var(--danger-subtle); color: var(--danger); }
+  .notif-icon.message { background: var(--accent-subtle); color: var(--accent-light); }
+
+  .notif-item-body { flex: 1; min-width: 0; }
+  .notif-item-from { font-size: 12.5px; font-weight: 600; color: var(--text-primary); }
+  .notif-item-subject { font-size: 12px; color: var(--text-secondary); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .notif-item-snippet { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .notif-item-tag {
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+    padding: 2px 6px; border-radius: 4px; flex-shrink: 0; align-self: flex-start;
+  }
+  .notif-item-tag.reply { background: var(--success-subtle); color: var(--success); }
+  .notif-item-tag.unsubscribe { background: var(--danger-subtle); color: var(--danger); }
+  .notif-item-tag.message { background: var(--accent-subtle); color: var(--accent-light); }
+
   /* Tab switcher */
   .tab-bar {
     display: flex;
@@ -1007,9 +1059,9 @@
   }
 
   .alert-icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
-  .alert-success { background: var(--success-subtle); color: #34D399; border: 1px solid rgba(16,185,129,0.2); }
-  .alert-warning { background: var(--warning-subtle); color: #FCD34D; border: 1px solid rgba(245,158,11,0.2); }
-  .alert-info    { background: var(--accent-subtle); color: var(--accent-light); border: 1px solid rgba(79,70,229,0.2); }
+  .alert-success { background: var(--success-subtle); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
+  .alert-warning { background: var(--warning-subtle); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
+  .alert-info    { background: var(--accent-subtle); color: var(--accent-light); border: 1px solid var(--accent-glow); }
 
   /* Tooltip */
   [data-tip] { position: relative; }
@@ -1051,51 +1103,6 @@
   .flex { display: flex; }
   .flex-center { display: flex; align-items: center; }
   .flex-between { display: flex; align-items: center; justify-content: space-between; }
-
-  /* Pricing */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-  .pricing-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    transition: var(--transition);
-  }
-  .pricing-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-  .pricing-card.featured {
-    border-color: var(--accent);
-    box-shadow: 0 8px 30px var(--accent-glow);
-    position: relative;
-  }
-  .pricing-card.featured::before {
-    content: 'MOST POPULAR';
-    position: absolute;
-    top: -10px; left: 50%; transform: translateX(-50%);
-    background: var(--accent);
-    color: white;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-  .pricing-plan-name { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 10px; }
-  .pricing-price { font-family: 'DM Sans', sans-serif; font-size: 30px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
-  .pricing-price span { font-size: 13px; font-weight: 500; color: var(--text-muted); }
-  .pricing-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
-  .pricing-features { list-style: none; margin-bottom: 20px; flex: 1; }
-  .pricing-features li {
-    display: flex; align-items: flex-start; gap: 8px;
-    font-size: 12.5px; color: var(--text-secondary);
-    margin-bottom: 10px; line-height: 1.4;
-  }
-  .pricing-features li svg { width: 14px; height: 14px; color: var(--success); flex-shrink: 0; margin-top: 1px; }
 
   /* Theme swatches */
   .theme-swatch {
@@ -1140,8 +1147,9 @@
     <div class="auth-left">
       <div class="logo-mark" style="margin-bottom:52px">
         <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3.5 17V8.2l4.5 4.3L12 6l4 6.5 4.5-4.3V17"/>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M20.5 3.5L2.5 10.8c-.7.3-.6 1.3.1 1.5l6.3 2 2 6.3c.2.7 1.2.8 1.5.1L20.5 3.5z" fill="white"/>
+            <path d="M11 13.6L20.5 3.5" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
           </svg>
         </div>
         <div>
@@ -1185,18 +1193,6 @@
         <div class="auth-form-title">Welcome back</div>
         <div class="auth-form-sub">Sign in to your account to continue</div>
 
-        <button class="google-btn" onclick="handleGoogleSignIn()">
-          <svg class="google-logo" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          Continue with Google
-        </button>
-
-        <div class="or-divider"><span>or sign in with email</span></div>
-
         <div id="login-error" class="alert alert-warning" style="display:none"></div>
 
         <div class="form-group">
@@ -1220,18 +1216,6 @@
       <div id="form-signup" style="display:none">
         <div class="auth-form-title">Create your account</div>
         <div class="auth-form-sub">Get started free — no credit card required</div>
-
-        <button class="google-btn" onclick="handleGoogleSignIn()">
-          <svg class="google-logo" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          Sign up with Google
-        </button>
-
-        <div class="or-divider"><span>or use email</span></div>
 
         <div id="signup-error" class="alert alert-warning" style="display:none"></div>
 
@@ -1265,13 +1249,13 @@
     <div class="sidebar-logo">
       <div class="logo-mark">
         <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3.5 17V8.2l4.5 4.3L12 6l4 6.5 4.5-4.3V17"/>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M20.5 3.5L2.5 10.8c-.7.3-.6 1.3.1 1.5l6.3 2 2 6.3c.2.7 1.2.8 1.5.1L20.5 3.5z" fill="white"/>
+            <path d="M11 13.6L20.5 3.5" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
           </svg>
         </div>
         <div>
           <div class="logo-text">MailFlow Pro</div>
-          <div class="logo-badge">v1.0 Professional</div>
         </div>
       </div>
     </div>
@@ -1281,20 +1265,21 @@
         <div class="avatar" id="sidebar-avatar">A</div>
         <div class="user-info">
           <div class="user-name" id="sidebar-username">Loading...</div>
-          <div class="user-plan">Pro Plan</div>
+          <div class="user-plan" id="sidebar-active-account">–</div>
         </div>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="user-dropdown-chevron" style="color:var(--text-muted);flex-shrink:0;transition:transform 0.2s">
           <path d="M6 9l6 6 6-6"/>
         </svg>
       </div>
       <div class="user-dropdown" id="user-dropdown">
-        <div class="user-dropdown-item" onclick="navigate('settings', document.querySelectorAll('.nav-item')[6]); closeUserDropdown()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          Account Settings
+        <div class="user-dropdown-item" onclick="openEditNameModal(); closeUserDropdown()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit name
         </div>
-        <div class="user-dropdown-item" onclick="window.location='/api/auth/gmail/connect'; closeUserDropdown()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Gmail Connection
+        <div class="user-dropdown-sep"></div>
+        <div style="padding:6px 10px 2px;font-size:10.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px">Gmail accounts</div>
+        <div id="account-switcher-list">
+          <div class="user-dropdown-item" style="color:var(--text-muted)">Loading...</div>
         </div>
         <div class="user-dropdown-sep"></div>
         <div class="user-dropdown-item danger" onclick="signOut(); closeUserDropdown()">
@@ -1385,21 +1370,6 @@
   <div class="main">
     <header class="topbar">
       <div class="topbar-title" id="page-title">Dashboard</div>
-      <div class="topbar-actions">
-        <button class="btn btn-secondary" style="position:relative" data-tip="Notifications">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-          </svg>
-          <div class="notif-dot"></div>
-        </button>
-        <button class="btn btn-primary" onclick="navigate('new-campaign', document.querySelector('.nav-item:nth-child(2)'))">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
-          New Campaign
-        </button>
-      </div>
     </header>
 
     <div class="content">
@@ -1507,63 +1477,6 @@
           <div id="dash-gmail-alert-text">Checking Gmail connection...</div>
         </div>
 
-        <!-- ── PRICING ─────────────────────────────────── -->
-        <div class="section-head mb-16">
-          <div>
-            <div class="section-title">Plans & Pricing</div>
-            <div class="section-sub">Upgrade anytime as your outreach grows</div>
-          </div>
-        </div>
-        <div class="pricing-grid">
-          <div class="pricing-card">
-            <div class="pricing-plan-name">Free</div>
-            <div class="pricing-price">₹0<span>/month</span></div>
-            <div class="pricing-sub">Get started with the basics</div>
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>500 emails/month</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Email templates</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Basic reports (CSV)</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>1 Gmail account</li>
-            </ul>
-            <button class="btn btn-secondary" style="width:100%;justify-content:center" onclick="toast('Aap already Free plan pe ho.', 'info')">Current Plan</button>
-          </div>
-          <div class="pricing-card">
-            <div class="pricing-plan-name">Starter</div>
-            <div class="pricing-price">₹499<span>/month</span></div>
-            <div class="pricing-sub">For small outreach teams</div>
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>5,000 emails/month</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>AI email + subject generator</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Lead scoring (hot/warm/cold)</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Excel + CSV export</li>
-            </ul>
-            <button class="btn btn-secondary" style="width:100%;justify-content:center" onclick="toast('Upgrade jaldi aa raha hai! 🚀', 'info')">Upgrade</button>
-          </div>
-          <div class="pricing-card featured">
-            <div class="pricing-plan-name">Premium</div>
-            <div class="pricing-price">₹1,499<span>/month</span></div>
-            <div class="pricing-sub">For growing businesses</div>
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>30,000 emails/month</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Custom themes & branding</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Priority send queue</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics</li>
-            </ul>
-            <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="toast('Upgrade jaldi aa raha hai! 🚀', 'info')">Upgrade</button>
-          </div>
-          <div class="pricing-card">
-            <div class="pricing-plan-name">Pro</div>
-            <div class="pricing-price">₹3,999<span>/month</span></div>
-            <div class="pricing-sub">For agencies & high-volume senders</div>
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>60,000 emails/month</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Multiple Gmail accounts</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Team analytics</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
-            </ul>
-            <button class="btn btn-secondary" style="width:100%;justify-content:center" onclick="toast('Upgrade jaldi aa raha hai! 🚀', 'info')">Upgrade</button>
-          </div>
-        </div>
       </div>
 
       <!-- ── CAMPAIGNS PAGE ──────────────────────────────── -->
@@ -1573,12 +1486,6 @@
             <div class="section-title">Campaigns</div>
             <div class="section-sub">Manage and monitor all your email campaigns</div>
           </div>
-          <button class="btn btn-primary" onclick="navigate('new-campaign', null)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            New Campaign
-          </button>
         </div>
 
         <div class="tab-bar mb-24">
@@ -1616,12 +1523,21 @@
               </div>
               <div class="form-group" style="margin-bottom:12px">
                 <label>Email body</label>
-                <textarea id="nc-body" placeholder="Hi {Name},&#10;&#10;I noticed you are the {Role} at {Company} in {City}...&#10;&#10;Use {Name}, {Company}, {Role}, {City} as placeholders." style="min-height:180px"></textarea>
+                <textarea id="nc-body" placeholder="Hi {Name},&#10;&#10;I noticed you are the {Role} at {Company} in {City}...&#10;&#10;Use {Name}, {Company}, {Role}, {City} as placeholders." style="min-height:180px" oninput="updateNcPreviewButton()"></textarea>
               </div>
-              <button class="btn btn-secondary" onclick="saveCurrentAsTemplate()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Save as Template
-              </button>
+              <div id="nc-preview-wrap" style="display:none;margin-bottom:12px">
+                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px">Preview (as it will be sent)</div>
+                <div style="background:#F1F3F4;border:1px solid var(--border);border-radius:10px;padding:10px">
+                  <iframe id="nc-preview-iframe" style="width:100%;min-height:220px;border:none;background:transparent" srcdoc=""></iframe>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-secondary" id="nc-preview-btn" style="display:none" onclick="toggleNcPreview()">Preview HTML</button>
+                <button class="btn btn-secondary" onclick="saveCurrentAsTemplate()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Save as Template
+                </button>
+              </div>
             </div>
 
             <div class="card">
@@ -1726,6 +1642,7 @@
         <div class="tab-bar">
           <div class="tab-item active" onclick="switchAiTab(this,'ai-tab-email')">Email Generator</div>
           <div class="tab-item" onclick="switchAiTab(this,'ai-tab-subjects')">Subject Lines</div>
+          <div class="tab-item" onclick="switchAiTab(this,'ai-tab-html')">Styled HTML Email</div>
         </div>
 
         <div id="ai-tab-email" class="grid-2" style="gap:20px;align-items:start">
@@ -1788,6 +1705,53 @@
           <div class="card">
             <div class="table-title mb-16">Generated Subject Lines</div>
             <div id="ai-subjects-output" style="font-size:13px;color:var(--text-secondary)">Fill in the context and click Generate.</div>
+          </div>
+        </div>
+        <div id="ai-tab-html" class="grid-2" style="gap:20px;align-items:start;display:none">
+          <div class="card">
+            <div class="table-title mb-6">Describe what to include</div>
+            <div class="text-sm text-muted mb-16">Jaise ki: "Welcome email — user ka account activate ho gaya hai. 3 next steps dikhao: Dashboard dekho, Lessons complete karo, Certificate paao. Ek button ho 'Go to Dashboard'. Footer mein support email daalo."</div>
+            <div class="form-group">
+              <label>Brief / context — kya kya include karna hai</label>
+              <textarea id="html-brief" placeholder="e.g. Welcome email for new academy signups. Include 3 numbered next-steps: view dashboard, watch lessons, earn certificate. Add a CTA button 'Go to Dashboard'. Footer should mention support email." style="min-height:160px"></textarea>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Brand / sender name</label>
+                <input type="text" id="html-brand" placeholder="e.g. NovaEdge Academy"/>
+              </div>
+              <div class="form-group">
+                <label>CTA button label (optional)</label>
+                <input type="text" id="html-cta" placeholder="e.g. Go to Dashboard"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Tone</label>
+              <select id="html-tone">
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly</option>
+                <option value="warm and welcoming">Warm & Welcoming</option>
+                <option value="direct / bold">Direct / Bold</option>
+              </select>
+            </div>
+            <div id="html-email-error" class="alert alert-warning" style="display:none"></div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="generateHtmlEmailAi()" id="html-email-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              Generate Styled Email
+            </button>
+          </div>
+          <div class="card">
+            <div class="table-title mb-16">Live Preview</div>
+            <div style="background:#F1F3F4;border:1px solid var(--border);border-radius:10px;padding:12px;min-height:260px">
+              <iframe id="html-email-preview" style="width:100%;min-height:340px;border:none;background:transparent" srcdoc=""></iframe>
+              <div id="html-email-placeholder" class="text-muted text-sm" style="padding:8px">Fill in the brief on the left and click Generate to see a live preview here.</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button class="btn btn-secondary" style="flex:1;justify-content:center" onclick="saveHtmlEmailAsTemplate()">Save as Template</button>
+              <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="useHtmlEmailInCampaign()">Use in Campaign</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1867,7 +1831,7 @@
                 <div style="font-size:20px;font-weight:700;color:var(--success)" id="settings-stat-sent">–</div>
                 <div style="font-size:10.5px;color:var(--text-muted);margin-top:3px">Emails Sent</div>
               </div>
-              <div style="text-align:center;padding:12px;background:var(--accent-subtle);border-radius:10px;border:1px solid rgba(79,70,229,0.2)">
+              <div style="text-align:center;padding:12px;background:var(--accent-subtle);border-radius:10px;border:1px solid var(--accent-glow)">
                 <div style="font-size:20px;font-weight:700;color:var(--accent-light)" id="settings-stat-rate">–</div>
                 <div style="font-size:10.5px;color:var(--text-muted);margin-top:3px">Success Rate</div>
               </div>
@@ -1886,7 +1850,11 @@
           <div class="card">
             <div class="table-title mb-6">Appearance</div>
             <div class="text-sm text-muted mb-16">Pick a color theme for your dashboard</div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px" id="theme-picker">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px" id="theme-picker">
+              <div class="theme-swatch" data-theme="gmail" onclick="setTheme('gmail')">
+                <div class="theme-swatch-preview" style="background:linear-gradient(135deg,#FFFFFF,#F6F8FC);border:1px solid rgba(0,0,0,0.1)"></div>
+                <div class="theme-swatch-label">Gmail</div>
+              </div>
               <div class="theme-swatch" data-theme="indigo" onclick="setTheme('indigo')">
                 <div class="theme-swatch-preview" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)"></div>
                 <div class="theme-swatch-label">Indigo</div>
@@ -1903,6 +1871,15 @@
                 <div class="theme-swatch-preview" style="background:linear-gradient(135deg,#16A34A,#84CC16)"></div>
                 <div class="theme-swatch-label">Forest</div>
               </div>
+            </div>
+          </div>
+
+          <!-- Unsubscribed Contacts -->
+          <div class="card">
+            <div class="table-title mb-6">Unsubscribed Contacts</div>
+            <div class="text-sm text-muted mb-16">Every email you send includes an unsubscribe link. Anyone who clicks it lands here and is automatically skipped in all future campaigns.</div>
+            <div id="settings-unsubscribes-list">
+              <div class="text-muted text-sm">Loading...</div>
             </div>
           </div>
         </div>
@@ -1983,6 +1960,28 @@
 </div>
 
 
+<!-- ── EDIT NAME MODAL ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-edit-name">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Edit name</div>
+      <button class="modal-close" onclick="closeModal('modal-edit-name')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label>Full name</label>
+      <input type="text" id="edit-name-input" placeholder="Your name"/>
+    </div>
+    <div id="edit-name-error" class="alert alert-warning" style="display:none;margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary" style="flex:1;justify-content:center" onclick="closeModal('modal-edit-name')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveEditedName()">Save</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  JAVASCRIPT                                               -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -2002,8 +2001,8 @@
     });
   }
   (function restoreTheme() {
-    let saved = 'indigo';
-    try { saved = localStorage.getItem('mailflow-theme') || 'indigo'; } catch (e) {}
+    let saved = 'gmail';
+    try { saved = localStorage.getItem('mailflow-theme') || 'gmail'; } catch (e) {}
     document.documentElement.setAttribute('data-theme', saved);
   })();
 
@@ -2078,6 +2077,9 @@
   function switchTab(el, tabId) {
     el.parentElement.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
+    const filterMap = { 'tab-all': 'all', 'tab-running': 'running', 'tab-completed': 'completed', 'tab-draft': 'draft' };
+    activeCampaignFilter = filterMap[tabId] || 'all';
+    renderCampaignsList();
   }
 
   function switchAiTab(el, tabId) {
@@ -2085,6 +2087,7 @@
     el.classList.add('active');
     document.getElementById('ai-tab-email').style.display = (tabId === 'ai-tab-email') ? 'grid' : 'none';
     document.getElementById('ai-tab-subjects').style.display = (tabId === 'ai-tab-subjects') ? 'grid' : 'none';
+    document.getElementById('ai-tab-html').style.display = (tabId === 'ai-tab-html') ? 'grid' : 'none';
   }
 
   function openModal(id) { document.getElementById(id).classList.add('open'); }
@@ -2107,19 +2110,25 @@
   document.addEventListener('click', (e) => {
     const wrap = document.querySelector('.sidebar-user-wrap');
     if (wrap && !wrap.contains(e.target)) closeUserDropdown();
+    const notifWrap = document.querySelector('.notif-wrap');
+    if (notifWrap && !notifWrap.contains(e.target)) closeNotifPanel();
   });
 
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('open');
-    });
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+  // ══════════════════════════════════════════════════════════
+  //  GMAIL CONNECT
+  // ══════════════════════════════════════════════════════════
+  async function connectGmail() {
+    try {
+      const check = await api('/api/auth/gmail/check');
+      if (!check.ready) {
+        toast(`client_secrets.json not found at: ${check.path}. Download it from Google Cloud Console and place it there.`, 'warning');
+        return;
+      }
+      window.location = '/api/auth/gmail/connect';
+    } catch (e) {
+      toast('Could not start Gmail connection: ' + e.message, 'warning');
     }
-  });
+  }
 
   // ══════════════════════════════════════════════════════════
   //  AUTH
@@ -2134,15 +2143,11 @@
     }
   }
 
-  function handleGoogleSignIn() {
-    toast('Google sign-in abhi backend me wired nahi hai — email/password se sign in karo.', 'info');
-  }
-
   async function doLogin() {
     hideErr('login-error');
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-    if (!email || !password) { showErr('login-error', 'Email aur password dono bharo.'); return; }
+    if (!email || !password) { showErr('login-error', 'Please enter both email and password.'); return; }
     try {
       const fd = new FormData();
       fd.append('email', email);
@@ -2160,8 +2165,8 @@
     const last = document.getElementById('signup-lastname').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
-    if (!first || !email || !password) { showErr('signup-error', 'Name, email aur password bharo.'); return; }
-    if (password.length < 8) { showErr('signup-error', 'Password kam se kam 8 characters ka hona chahiye.'); return; }
+    if (!first || !email || !password) { showErr('signup-error', 'Please fill in name, email, and password.'); return; }
+    if (password.length < 8) { showErr('signup-error', 'Password must be at least 8 characters.'); return; }
     try {
       const fd = new FormData();
       fd.append('name', (first + ' ' + last).trim());
@@ -2181,6 +2186,7 @@
       document.getElementById('sidebar-username').textContent = user.name;
       document.getElementById('sidebar-avatar').textContent = (user.name || '?').charAt(0).toUpperCase();
     }
+    loadAccountSwitcher();
     navigate('dashboard', document.querySelector('.nav-item'));
   }
 
@@ -2188,6 +2194,92 @@
     try { await api('/api/auth/logout', { method: 'POST' }); } catch (e) {}
     document.getElementById('app-shell').classList.add('hidden');
     document.getElementById('auth-page').classList.remove('hidden');
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  EDIT NAME
+  // ══════════════════════════════════════════════════════════
+  function openEditNameModal() {
+    document.getElementById('edit-name-input').value = document.getElementById('sidebar-username').textContent;
+    hideErr('edit-name-error');
+    openModal('modal-edit-name');
+  }
+
+  async function saveEditedName() {
+    const name = document.getElementById('edit-name-input').value.trim();
+    if (!name) { showErr('edit-name-error', 'Name cannot be empty.'); return; }
+    try {
+      const fd = new FormData();
+      fd.append('name', name);
+      await api('/api/auth/update-name', { method: 'POST', body: fd });
+      document.getElementById('sidebar-username').textContent = name;
+      document.getElementById('sidebar-avatar').textContent = name.charAt(0).toUpperCase();
+      const settingsDisplay = document.getElementById('settings-name-display');
+      if (settingsDisplay) settingsDisplay.textContent = name;
+      closeModal('modal-edit-name');
+      toast('Name updated.');
+    } catch (e) {
+      showErr('edit-name-error', e.message);
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  MULTI-ACCOUNT GMAIL SWITCHER
+  // ══════════════════════════════════════════════════════════
+  async function loadAccountSwitcher() {
+    const listEl = document.getElementById('account-switcher-list');
+    const activeLabel = document.getElementById('sidebar-active-account');
+    try {
+      const accounts = await api('/api/settings/gmail-accounts');
+      if (!accounts.length) {
+        listEl.innerHTML = '<div class="user-dropdown-item" style="color:var(--text-muted)">No accounts linked</div>';
+        activeLabel.textContent = 'No Gmail linked';
+        return;
+      }
+      const active = accounts.find(a => a.is_active);
+      activeLabel.textContent = active ? active.email : 'No Gmail linked';
+      listEl.innerHTML = accounts.map(a => `
+        <div class="user-dropdown-item" style="justify-content:space-between" onclick="event.stopPropagation()">
+          <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0;cursor:pointer" onclick="switchGmailAccount(${a.id})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:${a.is_active ? 'var(--success)' : 'var(--text-muted)'}">
+              ${a.is_active
+                ? '<path d="M20 6L9 17l-5-5"/>'
+                : '<circle cx="12" cy="12" r="9"/>'}
+            </svg>
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(a.email)}</span>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;cursor:pointer;color:var(--text-muted)" onclick="unlinkGmailAccount(${a.id})">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </div>
+      `).join('');
+    } catch (e) {
+      listEl.innerHTML = '<div class="user-dropdown-item" style="color:var(--text-muted)">Could not load accounts</div>';
+    }
+  }
+
+  async function switchGmailAccount(id) {
+    try {
+      await api(`/api/settings/gmail-accounts/${id}/activate`, { method: 'POST' });
+      toast('Switched active Gmail account.');
+      loadAccountSwitcher();
+      if (document.getElementById('page-settings').classList.contains('active')) loadSettings();
+      if (document.getElementById('page-dashboard').classList.contains('active')) loadDashboard();
+    } catch (e) {
+      toast('Could not switch account: ' + e.message, 'warning');
+    }
+  }
+
+  async function unlinkGmailAccount(id) {
+    if (!confirm('Unlink this Gmail account?')) return;
+    try {
+      await api(`/api/settings/gmail-accounts/${id}`, { method: 'DELETE' });
+      toast('Account unlinked.');
+      loadAccountSwitcher();
+      if (document.getElementById('page-settings').classList.contains('active')) loadSettings();
+    } catch (e) {
+      toast('Could not unlink account: ' + e.message, 'warning');
+    }
   }
 
   async function checkAuthOnLoad() {
@@ -2201,9 +2293,10 @@
     // Handle Gmail OAuth redirect back
     const params = new URLSearchParams(window.location.search);
     if (params.get('gmail') === 'connected') {
-      toast('Gmail connect ho gaya! ✅');
+      toast('Gmail connected successfully! ✅');
+      loadAccountSwitcher();
     } else if (params.get('gmail') === 'error') {
-      toast('Gmail connect nahi ho paaya: ' + (params.get('msg') || 'unknown error'), 'warning');
+      toast('Gmail connect failed: ' + (params.get('msg') || 'unknown error'), 'warning');
     }
     if (params.has('gmail')) {
       window.history.replaceState({}, '', window.location.pathname);
@@ -2227,7 +2320,7 @@
       const tbody = document.getElementById('dash-recent-campaigns');
       const recent = s.recent_campaigns || [];
       if (recent.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-muted text-sm">Koi campaign nahi mili — pehli campaign banao.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-muted text-sm">No campaigns yet — create your first campaign.</td></tr>';
       } else {
         tbody.innerHTML = recent.map(c => {
           const rate = (c.sent_count + c.failed_count) > 0
@@ -2260,7 +2353,7 @@
         alertText.innerHTML = `<strong>Gmail not connected</strong> — Go to Settings to connect Gmail before launching campaigns.`;
       }
     } catch (e) {
-      toast('Dashboard load nahi ho paya: ' + e.message, 'warning');
+      toast('Failed to load dashboard: ' + e.message, 'warning');
     }
   }
 
@@ -2282,43 +2375,60 @@
   // ══════════════════════════════════════════════════════════
   //  CAMPAIGNS
   // ══════════════════════════════════════════════════════════
+  let cachedCampaigns = [];
+  let activeCampaignFilter = 'all';
+
   async function loadCampaigns() {
     const container = document.getElementById('campaigns-list');
     try {
-      const campaigns = await api('/api/campaigns');
-      if (campaigns.length === 0) {
-        container.innerHTML = '<div class="text-muted text-sm">Abhi tak koi campaign nahi hai. "New Campaign" se ek banao.</div>';
-        return;
-      }
-      container.innerHTML = campaigns.map(c => {
-        const total = c.total_recipients || 0;
-        const rate = (c.sent_count + c.failed_count) > 0
-          ? Math.round(c.sent_count / (c.sent_count + c.failed_count) * 100) : 0;
-        const bodyPreview = (c.template_body || '').replace(/\s+/g, ' ').trim().slice(0, 140);
-        return `<div class="campaign-card" onclick="openCampaignDetail(${c.id})">
-          <div class="cc-head">
-            <div>
-              <div class="cc-name">${escapeHtml(c.campaign_name)}</div>
-              <div class="cc-meta">Created ${(c.created_at||'').slice(0,10)}</div>
-            </div>
-            ${statusBadge(c.status)}
-          </div>
-          <div style="margin-bottom:14px;padding:10px 12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border)">
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:3px">Subject: <span style="color:var(--text-secondary)">${escapeHtml(c.subject || '—')}</span></div>
-            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">${escapeHtml(bodyPreview)}${(c.template_body||'').length > 140 ? '…' : ''}</div>
-          </div>
-          <div class="cc-stats">
-            <div><div class="cc-stat-val">${total}</div><div class="cc-stat-lbl">Total</div></div>
-            <div><div class="cc-stat-val" style="color:var(--success)">${c.sent_count}</div><div class="cc-stat-lbl">Sent</div></div>
-            <div><div class="cc-stat-val" style="color:var(--danger)">${c.failed_count}</div><div class="cc-stat-lbl">Failed</div></div>
-            <div><div class="cc-stat-val">${rate}%</div><div class="cc-stat-lbl">Rate</div></div>
-          </div>
-          <div class="progress-track"><div class="progress-fill" style="width:${rate}%"></div></div>
-        </div>`;
-      }).join('');
+      cachedCampaigns = await api('/api/campaigns');
+      renderCampaignsList();
     } catch (e) {
-      container.innerHTML = `<div class="text-muted text-sm">Campaigns load nahi ho paayi: ${escapeHtml(e.message)}</div>`;
+      container.innerHTML = `<div class="text-muted text-sm">Failed to load campaigns: ${escapeHtml(e.message)}</div>`;
     }
+  }
+
+  function renderCampaignsList() {
+    const container = document.getElementById('campaigns-list');
+    let campaigns = cachedCampaigns;
+    if (activeCampaignFilter === 'running') {
+      campaigns = campaigns.filter(c => c.status === 'running');
+    } else if (activeCampaignFilter === 'completed') {
+      campaigns = campaigns.filter(c => c.status === 'completed');
+    } else if (activeCampaignFilter === 'draft') {
+      campaigns = campaigns.filter(c => c.status === 'draft' || c.status === 'scheduled');
+    }
+
+    if (campaigns.length === 0) {
+      container.innerHTML = `<div class="text-muted text-sm">${cachedCampaigns.length === 0 ? 'No campaigns yet. Use "New Campaign" to create one.' : 'No campaigns match this filter.'}</div>`;
+      return;
+    }
+    container.innerHTML = campaigns.map(c => {
+      const total = c.total_recipients || 0;
+      const rate = (c.sent_count + c.failed_count) > 0
+        ? Math.round(c.sent_count / (c.sent_count + c.failed_count) * 100) : 0;
+      const bodyPreview = (c.template_body || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+      return `<div class="campaign-card" onclick="openCampaignDetail(${c.id})">
+        <div class="cc-head">
+          <div>
+            <div class="cc-name">${escapeHtml(c.campaign_name)}</div>
+            <div class="cc-meta">Created ${(c.created_at||'').slice(0,10)}</div>
+          </div>
+          ${statusBadge(c.status)}
+        </div>
+        <div style="margin-bottom:14px;padding:10px 12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:3px">Subject: <span style="color:var(--text-secondary)">${escapeHtml(c.subject || '—')}</span></div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">${escapeHtml(bodyPreview)}${(c.template_body||'').length > 140 ? '…' : ''}</div>
+        </div>
+        <div class="cc-stats">
+          <div><div class="cc-stat-val">${total}</div><div class="cc-stat-lbl">Total</div></div>
+          <div><div class="cc-stat-val" style="color:var(--success)">${c.sent_count}</div><div class="cc-stat-lbl">Sent</div></div>
+          <div><div class="cc-stat-val" style="color:var(--danger)">${c.failed_count}</div><div class="cc-stat-lbl">Failed</div></div>
+          <div><div class="cc-stat-val">${rate}%</div><div class="cc-stat-lbl">Rate</div></div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${rate}%"></div></div>
+      </div>`;
+    }).join('');
   }
 
   let currentModalCampaignId = null;
@@ -2338,7 +2448,7 @@
       document.getElementById('cd-body').textContent = c.template_body || '—';
       const leads = c.leads || [];
       if (leads.length === 0) {
-        document.getElementById('cd-leads-body').innerHTML = '<tr><td colspan="4" class="text-muted text-sm">Koi lead nahi mili.</td></tr>';
+        document.getElementById('cd-leads-body').innerHTML = '<tr><td colspan="4" class="text-muted text-sm">No leads found.</td></tr>';
       } else {
         document.getElementById('cd-leads-body').innerHTML = leads.slice(0, 50).map(l => `
           <tr><td>${escapeHtml(l.name || '—')}</td><td style="color:var(--text-muted)">${escapeHtml(l.email)}</td>
@@ -2346,7 +2456,7 @@
         `).join('');
       }
     } catch (e) {
-      toast('Campaign detail load nahi ho paayi: ' + e.message, 'warning');
+      toast('Failed to load campaign details: ' + e.message, 'warning');
     }
   }
 
@@ -2357,15 +2467,15 @@
 
   async function deleteCurrentModalCampaign() {
     if (!currentModalCampaignId) return;
-    if (!confirm('Ye campaign delete karna hai? Ye action undo nahi ho sakta.')) return;
+    if (!confirm('Delete this campaign? This action cannot be undone.')) return;
     try {
       await api('/api/campaigns/' + currentModalCampaignId, { method: 'DELETE' });
       closeModal('modal-campaign-detail');
-      toast('Campaign delete kar diya.');
+      toast('Campaign deleted.');
       loadCampaigns();
       loadDashboard();
     } catch (e) {
-      toast('Delete nahi ho paaya: ' + e.message, 'warning');
+      toast('Delete failed: ' + e.message, 'warning');
     }
   }
 
@@ -2422,8 +2532,8 @@
     const subject = document.getElementById('nc-subject').value.trim();
     const body = document.getElementById('nc-body').value.trim();
 
-    if (!name || !subject || !body) { showErr('nc-error', 'Campaign name, subject aur body — teeno bharo.'); return; }
-    if (!selectedLeadFile) { showErr('nc-error', 'Pehle leads wali Excel/CSV file upload karo.'); return; }
+    if (!name || !subject || !body) { showErr('nc-error', 'Please fill in campaign name, subject, and body.'); return; }
+    if (!selectedLeadFile) { showErr('nc-error', 'Please upload an Excel/CSV file with leads first.'); return; }
 
     const btn = document.getElementById('nc-launch-btn');
     btn.disabled = true;
@@ -2437,7 +2547,7 @@
       fd.append('file', selectedLeadFile);
       fd.append('launch_now', 'true');
       await api('/api/campaigns', { method: 'POST', body: fd });
-      toast('Campaign launch ho gayi! Emails bheji ja rahi hain.');
+      toast('Campaign launched! Emails are being sent.');
       document.getElementById('nc-name').value = '';
       document.getElementById('nc-subject').value = '';
       document.getElementById('nc-body').value = '';
@@ -2463,7 +2573,7 @@
       const templates = await api('/api/templates');
       cachedTemplates = templates;
       if (templates.length === 0) {
-        container.innerHTML = '<div class="text-muted text-sm">Abhi tak koi template save nahi hui. "New Template" se ek banao.</div>';
+        container.innerHTML = '<div class="text-muted text-sm">No templates saved yet. Use "New Template" to create one.</div>';
         return;
       }
       container.innerHTML = templates.map(t => `
@@ -2481,17 +2591,18 @@
         </div>
       `).join('');
     } catch (e) {
-      container.innerHTML = `<div class="text-muted text-sm">Templates load nahi ho paayi: ${escapeHtml(e.message)}</div>`;
+      container.innerHTML = `<div class="text-muted text-sm">Failed to load templates: ${escapeHtml(e.message)}</div>`;
     }
   }
 
   function useTemplateInCampaign(id) {
     const t = cachedTemplates.find(x => x.id === id);
-    if (!t) { toast('Template nahi mili.', 'warning'); return; }
+    if (!t) { toast('Template not found.', 'warning'); return; }
     navigate('new-campaign', document.querySelectorAll('.nav-item')[2]);
     document.getElementById('nc-subject').value = t.subject || '';
     document.getElementById('nc-body').value = t.body || '';
-    toast('Template load ho gayi — campaign name aur leads add karke launch karo.');
+    updateNcPreviewButton();
+    toast('Template loaded — add a campaign name and leads, then launch.');
   }
 
   async function saveTemplate() {
@@ -2499,7 +2610,7 @@
     const name = document.getElementById('tpl-name').value.trim();
     const subject = document.getElementById('tpl-subject').value.trim();
     const body = document.getElementById('tpl-body').value.trim();
-    if (!name || !subject || !body) { showErr('tpl-error', 'Sab fields bharo.'); return; }
+    if (!name || !subject || !body) { showErr('tpl-error', 'Please fill in all fields.'); return; }
     try {
       const fd = new FormData();
       fd.append('name', name); fd.append('subject', subject); fd.append('body', body);
@@ -2508,17 +2619,46 @@
       document.getElementById('tpl-name').value = '';
       document.getElementById('tpl-subject').value = '';
       document.getElementById('tpl-body').value = '';
-      toast('Template save ho gayi.');
+      toast('Template saved.');
       loadTemplates();
     } catch (e) {
       showErr('tpl-error', e.message);
     }
   }
 
+  function looksLikeHtml(text) {
+    return /<\s*[a-zA-Z][^>]*>/.test(text || '');
+  }
+
+  function updateNcPreviewButton() {
+    const body = document.getElementById('nc-body').value;
+    const btn = document.getElementById('nc-preview-btn');
+    btn.style.display = looksLikeHtml(body) ? 'inline-flex' : 'none';
+    if (!looksLikeHtml(body)) {
+      document.getElementById('nc-preview-wrap').style.display = 'none';
+      btn.textContent = 'Preview HTML';
+    }
+  }
+
+  function toggleNcPreview() {
+    const wrap = document.getElementById('nc-preview-wrap');
+    const btn = document.getElementById('nc-preview-btn');
+    const isOpen = wrap.style.display !== 'none';
+    if (isOpen) {
+      wrap.style.display = 'none';
+      btn.textContent = 'Preview HTML';
+    } else {
+      document.getElementById('nc-preview-iframe').srcdoc =
+        `<div style="font-family:Arial,Helvetica,sans-serif;padding:16px 0">${document.getElementById('nc-body').value}</div>`;
+      wrap.style.display = 'block';
+      btn.textContent = 'Hide Preview';
+    }
+  }
+
   function saveCurrentAsTemplate() {
     const subject = document.getElementById('nc-subject').value.trim();
     const body = document.getElementById('nc-body').value.trim();
-    if (!subject || !body) { toast('Pehle subject aur body likho, fir template save karo.', 'warning'); return; }
+    if (!subject || !body) { toast('Write a subject and body first, then save the template.', 'warning'); return; }
     document.getElementById('tpl-name').value = document.getElementById('nc-name').value.trim();
     document.getElementById('tpl-subject').value = subject;
     document.getElementById('tpl-body').value = body;
@@ -2526,12 +2666,12 @@
   }
 
   async function deleteTemplateById(id) {
-    if (!confirm('Ye template delete karni hai?')) return;
+    if (!confirm('Delete this template?')) return;
     try {
       await api('/api/templates/' + id, { method: 'DELETE' });
       loadTemplates();
     } catch (e) {
-      toast('Delete nahi ho paaya: ' + e.message, 'warning');
+      toast('Delete failed: ' + e.message, 'warning');
     }
   }
 
@@ -2545,7 +2685,7 @@
     const target = document.getElementById('ai-target').value.trim();
     const offer = document.getElementById('ai-offer').value.trim();
     const tone = document.getElementById('ai-tone').value;
-    if (!target || !offer) { showErr('ai-email-error', 'Target audience aur offer dono bharo.'); return; }
+    if (!target || !offer) { showErr('ai-email-error', 'Please fill in both target audience and offer.'); return; }
 
     const btn = document.getElementById('ai-email-btn');
     btn.disabled = true; btn.textContent = 'Generating...';
@@ -2566,11 +2706,11 @@
 
   function copyAiEmail() {
     const text = document.getElementById('ai-email-output').textContent;
-    navigator.clipboard.writeText(text).then(() => toast('Copy ho gaya clipboard me.'));
+    navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard.'));
   }
 
   function saveAiEmailAsTemplate() {
-    if (!lastAiEmail) { toast('Pehle ek email generate karo.', 'warning'); return; }
+    if (!lastAiEmail) { toast('Generate an email first.', 'warning'); return; }
     document.getElementById('tpl-name').value = '';
     document.getElementById('tpl-subject').value = lastAiEmail.subject || '';
     document.getElementById('tpl-body').value = lastAiEmail.body || '';
@@ -2578,17 +2718,66 @@
   }
 
   function useAiEmailInCampaign() {
-    if (!lastAiEmail) { toast('Pehle ek email generate karo.', 'warning'); return; }
+    if (!lastAiEmail) { toast('Generate an email first.', 'warning'); return; }
     navigate('new-campaign', document.querySelectorAll('.nav-item')[2]);
     document.getElementById('nc-subject').value = lastAiEmail.subject || '';
     document.getElementById('nc-body').value = lastAiEmail.body || '';
+    updateNcPreviewButton();
+  }
+
+  let lastAiHtmlEmail = null;
+
+  async function generateHtmlEmailAi() {
+    hideErr('html-email-error');
+    const brief = document.getElementById('html-brief').value.trim();
+    const brand = document.getElementById('html-brand').value.trim();
+    const cta = document.getElementById('html-cta').value.trim();
+    const tone = document.getElementById('html-tone').value;
+    if (!brief) { showErr('html-email-error', 'Please describe what the email should include.'); return; }
+
+    const btn = document.getElementById('html-email-btn');
+    btn.disabled = true; btn.textContent = 'Generating...';
+    try {
+      const fd = new FormData();
+      fd.append('brief', brief);
+      fd.append('brand_name', brand);
+      fd.append('cta_label', cta);
+      fd.append('tone', tone);
+      const result = await api('/api/ai/generate-html-email', { method: 'POST', body: fd });
+      lastAiHtmlEmail = result;
+      document.getElementById('html-email-placeholder').style.display = 'none';
+      const iframe = document.getElementById('html-email-preview');
+      iframe.srcdoc = `<div style="font-family:Arial,Helvetica,sans-serif;padding:20px 0">${result.html}</div>`;
+    } catch (e) {
+      showErr('html-email-error', e.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Generate Styled Email`;
+    }
+  }
+
+  function saveHtmlEmailAsTemplate() {
+    if (!lastAiHtmlEmail) { toast('Generate a styled email first.', 'warning'); return; }
+    document.getElementById('tpl-name').value = '';
+    document.getElementById('tpl-subject').value = lastAiHtmlEmail.subject || '';
+    document.getElementById('tpl-body').value = lastAiHtmlEmail.html || '';
+    openModal('modal-new-template');
+  }
+
+  function useHtmlEmailInCampaign() {
+    if (!lastAiHtmlEmail) { toast('Generate a styled email first.', 'warning'); return; }
+    navigate('new-campaign', document.querySelectorAll('.nav-item')[2]);
+    document.getElementById('nc-subject').value = lastAiHtmlEmail.subject || '';
+    document.getElementById('nc-body').value = lastAiHtmlEmail.html || '';
+    updateNcPreviewButton();
+    toast('Styled HTML email loaded into New Campaign — it will send as a formatted email, not plain text.');
   }
 
   async function generateSubjectsAi() {
     hideErr('ai-subjects-error');
     const context = document.getElementById('ai-subject-context').value.trim();
     const count = document.getElementById('ai-subject-count').value;
-    if (!context) { showErr('ai-subjects-error', 'Campaign/offer ka context likho.'); return; }
+    if (!context) { showErr('ai-subjects-error', 'Please describe the campaign/offer context.'); return; }
 
     const btn = document.getElementById('ai-subjects-btn');
     btn.disabled = true; btn.textContent = 'Generating...';
@@ -2616,7 +2805,7 @@
     try {
       const campaigns = await api('/api/campaigns');
       if (campaigns.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-muted text-sm">Koi campaign nahi mili.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="text-muted text-sm">No campaigns found.</td></tr>';
         select.innerHTML = '<option>No campaigns</option>';
         return;
       }
@@ -2635,14 +2824,14 @@
         </tr>`;
       }).join('');
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="7" class="text-muted text-sm">Reports load nahi ho paaye: ${escapeHtml(e.message)}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="text-muted text-sm">Failed to load reports: ${escapeHtml(e.message)}</td></tr>`;
     }
   }
 
   function exportReport(format) {
     const select = document.getElementById('reports-campaign-select');
     const id = select.value;
-    if (!id) { toast('Pehle koi campaign select karo.', 'warning'); return; }
+    if (!id) { toast('Select a campaign first.', 'warning'); return; }
     window.location = `/api/reports/${id}/export/${format}`;
   }
 
@@ -2665,40 +2854,62 @@
 
     highlightActiveTheme();
 
+    const unsubBox = document.getElementById('settings-unsubscribes-list');
+    try {
+      const unsubs = await api('/api/settings/unsubscribes');
+      if (unsubs.length === 0) {
+        unsubBox.innerHTML = '<div class="text-muted text-sm">No one has unsubscribed yet.</div>';
+      } else {
+        unsubBox.innerHTML = unsubs.map(u => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);margin-bottom:6px">
+            <span style="font-size:13px;color:var(--text-primary)">${escapeHtml(u.email)}</span>
+            <span style="font-size:11px;color:var(--text-muted)">${(u.created_at||'').slice(0,10)}</span>
+          </div>`).join('');
+      }
+    } catch (e) {
+      unsubBox.innerHTML = `<div class="text-muted text-sm">Failed to load: ${escapeHtml(e.message)}</div>`;
+    }
+
     const box = document.getElementById('settings-gmail-status');
     try {
-      const status = await api('/api/settings/gmail-status');
-      if (status.connected) {
-        box.innerHTML = `
-          <div class="alert alert-success" style="margin-bottom:16px">
-            <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            <div>Connected — ${escapeHtml(status.email)}</div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-secondary" onclick="window.location='/api/auth/gmail/connect'">Reconnect Gmail</button>
-            <button class="btn btn-danger" onclick="disconnectGmail()">Disconnect</button>
-          </div>`;
-      } else {
+      const accounts = await api('/api/settings/gmail-accounts');
+      if (accounts.length === 0) {
         box.innerHTML = `
           <div class="alert alert-info" style="margin-bottom:16px">
             <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <div>Gmail connected nahi hai — connect kiye bina campaigns launch nahi ho sakti.</div>
+            <div>Gmail is not connected — you cannot launch campaigns until it is connected.</div>
           </div>
-          <button class="btn btn-primary" onclick="window.location='/api/auth/gmail/connect'">Connect Gmail Account</button>`;
+          <button class="btn btn-primary" onclick="connectGmail()">Connect Gmail Account</button>`;
+      } else {
+        const rows = accounts.map(a => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:${a.is_active ? 'var(--success)' : 'var(--text-muted)'}">
+                ${a.is_active ? '<path d="M20 6L9 17l-5-5"/>' : '<circle cx="12" cy="12" r="9"/>'}
+              </svg>
+              <span style="font-size:13px;color:var(--text-primary)">${escapeHtml(a.email)}</span>
+              ${a.is_active ? '<span class="tag" style="font-size:10px">Active</span>' : ''}
+            </div>
+            <div style="display:flex;gap:6px">
+              ${!a.is_active ? `<button class="btn btn-secondary" style="padding:5px 10px;font-size:12px" onclick="switchGmailAccount(${a.id})">Use this</button>` : ''}
+              <button class="btn btn-danger" style="padding:5px 10px;font-size:12px" onclick="unlinkGmailAccount(${a.id})">Unlink</button>
+            </div>
+          </div>`).join('');
+        box.innerHTML = `${rows}<button class="btn btn-secondary" style="margin-top:4px" onclick="connectGmail()">+ Link another account</button>`;
       }
     } catch (e) {
-      box.innerHTML = `<div class="text-muted text-sm">Gmail status check nahi ho paaya: ${escapeHtml(e.message)}</div>`;
+      box.innerHTML = `<div class="text-muted text-sm">Failed to check Gmail status: ${escapeHtml(e.message)}</div>`;
     }
   }
 
   async function disconnectGmail() {
     try {
       await api('/api/settings/gmail-disconnect', { method: 'POST' });
-      toast('Gmail disconnect ho gaya.');
+      toast('Gmail disconnected.');
       loadSettings();
       loadDashboard();
     } catch (e) {
-      toast('Disconnect nahi ho paaya: ' + e.message, 'warning');
+      toast('Disconnect failed: ' + e.message, 'warning');
     }
   }
 </script>
